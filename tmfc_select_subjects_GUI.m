@@ -140,7 +140,6 @@ function add_new(~,~)
     else
         add_subs_full_path = {};
         add_new_subs = add_subjects();             
-        %assignin('base', 'add_new_subs', add_new_subs);
         if isempty(add_new_subs)
             fprintf(2,'TMFC Subjects: No newly selected subjects. \n');
         else
@@ -230,8 +229,6 @@ function confirm_paths(~,~)
         % Check SPM.mat files
         if SPM_check == 1              
             % Stage 1 - Check SPM.mat files existence
-            %assignin('base','subject_full_path',subject_full_path);
-            %assignin('base','subject_paths_tmp',subject_paths_tmp);
             [file_exist,subject_file_exist] = check_file_exist(subject_full_path,subject_paths_tmp);        
             if size(file_exist,1) == 0
             	fprintf(2,'TMFC Subjects: (Stage 1 Check Failed) - Selected SPM.mat files are missing from the directories. Please try again.\n');
