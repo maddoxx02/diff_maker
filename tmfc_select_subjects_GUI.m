@@ -123,7 +123,7 @@ function select_SPM_mat(~,~)
         else
             fprintf(2,'TMFC Subjects: The SPM.mat file has not been selected.\n');
             set(SS_MW_S2,'String','Not selected','ForegroundColor','red');
-            set(SS_MW_LB1,'String','');
+            set(SS_MW_LB1, 'String', '');
         end 
     end
 end
@@ -138,9 +138,8 @@ function add_new(~,~)
         fprintf(2,'TMFC Subjects: Cannot add new subjects without SPM.mat file. Please select subjects via ''Select subject folders'' button and proceed to Select SPM.mat file. \n');
 
     else
-        add_subs_full_path = {};                    
+        add_subs_full_path = {};
         add_new_subs = add_subjects();             
-        
         if isempty(add_new_subs)
             fprintf(2,'TMFC Subjects: No newly selected subjects. \n');
         else
@@ -156,7 +155,7 @@ function add_new(~,~)
             
             subject_paths_tmp = vertcat(subject_paths_tmp, add_new_subs);
             subject_paths_tmp = unique(subject_paths_tmp);
-
+           
             if new_subs_count(1) == 0
                 fprintf(2,'TMFC Subjects: Newly selected subjects are already present in the list, no new subjects added. \n');
             else
@@ -225,7 +224,7 @@ function confirm_paths(~,~)
     elseif (isempty(subject_full_path) && ~isempty(SPM_mat_path))
         fprintf(2,'TMFC Subjects: Please re-select subjects and SPM.mat file if required.\n');
     else
-        SS_MW_exit(SS_MW);   
+        delete(SS_MW);   
         
         % Check SPM.mat files
         if SPM_check == 1              
@@ -308,10 +307,11 @@ end
 %% Select SPM.mat file
 function [subject_full_path, SPM_mat_path] = add_mat_file(subject_dir)
     subject_full_path = {};  SPM_mat_path = {};
-    [mat_file_path] = spm_select( 1,'any','Select SPM.mat file for the first subject',{}, strtrim(subject_dir(1,:)), 'SPM.*');
+    [mat_file_path] = spm_select( 1,'any','Select SPM.mat file for the first subject',{}, strtrim(subject_dir(1,:)), 'SPM.*');    
     if ~isempty(mat_file_path)
-        [SPM_mat_path] = strrep(mat_file_path, strtrim(subject_dir(1,:)),'');   
+        [SPM_mat_path] = strrep(mat_file_path, strtrim(subject_dir(1,:)),'');
     end
+    
         
     for iSub = 1:size(subject_dir,1)
     	subject_full_path =  vertcat(subject_full_path,strcat(char(subject_dir(iSub,:)),char(SPM_mat_path)));
@@ -331,6 +331,7 @@ function [file_exist,subject_file_exist] = check_file_exist(subject_full_path,su
             file_exist{iSub,1} = subject_full_path{iSub};
             subject_file_exist{iSub,1} = subject_paths_tmp{iSub};
         else
+            %file_exist = {};
             file_not_exist{iSub,1} = subject_full_path{iSub};
         end                
     end 
@@ -338,9 +339,9 @@ function [file_exist,subject_file_exist] = check_file_exist(subject_full_path,su
     % Check if the variables storing the existing files are empty
     try
         file_exist = file_exist(~cellfun('isempty', file_exist)); 
-        subject_file_exist = subject_file_exist(~cellfun('isempty', subject_file_exist));
+        subject_file_exist = subject_file_exist(~cellfun('isempty', subject_file_exist)); 
     end
-
+    
     try 
         file_not_exist = file_not_exist(~cellfun('isempty',file_not_exist)); 
     end
